@@ -3,7 +3,6 @@ import { TweetVisualization } from './tweet_visualization'
 import { TweetNode, TweetTree } from './tweet_tree'
 import { TweetServer } from './tweet_server'
 import { Toolbar } from './toolbar'
-import { SerializedTweetNode } from './serialize'
 import * as d3 from 'd3'
 import { ContentProxy } from './proxy'
 
@@ -56,11 +55,6 @@ export class VisualizationController {
             })
     }
 
-    shareClicked() {
-        let value = SerializedTweetNode.fromTweetNode(this.tweetTree.root)
-        chrome.runtime.sendMessage({ payload: value, message: 'share' })
-    }
-
     expandOne() {
         for (let tweetNode of this.tweetTree.index.values()) {
             if (tweetNode.hasMore()) {
@@ -95,7 +89,6 @@ export class VisualizationController {
 
         this.toolbar = new Toolbar(document.getElementById('toolbar'))
         if (!offline) {
-            this.toolbar.addButton('Create shareable link', this.shareClicked.bind(this))
             this.expandButton = this.toolbar.addButton('Expand All', this.expandAll.bind(this))
         }
 

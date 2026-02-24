@@ -5,18 +5,6 @@ const tweetToLoad: {value?: string} = {}
 
 export function onMessageFromContentScript(request, sender, _sendResponse) {
     switch (request.message) {
-        case 'share':
-            // Handle share button click. The payload is the tree structure.
-            fetch('https://treeverse.app/share', {
-                method: 'POST',
-                body: JSON.stringify(request.payload),
-                headers: {
-                    'Content-Type': 'application/json'
-                },
-            }).then((response) => response.text())
-                .then((response) => chrome.tabs.create({ url: response }))
-            break;
-
         case 'ready':
             if (tweetToLoad.value) {
                 launchTreeverse(sender.tab.id, tweetToLoad.value)

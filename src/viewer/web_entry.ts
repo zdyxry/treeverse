@@ -1,22 +1,12 @@
-import { createPage } from './page'
 import { VisualizationController } from './visualization_controller'
-import { SerializedTweetNode } from './serialize'
-import { TweetTree } from './tweet_tree'
+import { createPage } from './page'
 
-function webEntry() {
-    createPage(document.getElementById('root'))
-    let controller = new VisualizationController()
+/**
+ * Entry point for the standalone web version (not used in extension).
+ */
+const root = document.getElementById('root')
+if (root) {
+  createPage(root)
 
-    let parts = document.location.href.split('/')
-    let key = parts[parts.length - 1]
-
-    fetch(`https://s3.amazonaws.com/treeverse/${key}.json`).then((c) => c.json())
-        .then((c) => {
-            let r = SerializedTweetNode.toTweetNode(c)
-            let tree = TweetTree.fromRoot(r)
-
-            controller.setInitialTweetData(tree)
-        }).catch((c) => alert(c))
+  let controller = new VisualizationController(null)
 }
-
-webEntry()

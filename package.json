@@ -1,20 +1,38 @@
 {
   "name": "treeverse",
-  "devDependencies": {
-    "@types/chrome": "^0.0.104",
-    "@types/d3": "^5.7.2",
-    "copy-webpack-plugin": "^5.1.1",
-    "ts-loader": "^6.2.2",
-    "typescript": "^3.8.3",
-    "webpack": "^4.42.1",
-    "webpack-cli": "^3.3.11",
-    "webpack-dev-server": "^3.10.3"
-  },
-  "version": "0.0.1",
-  "description": "Treeverse Chrome Extension",
+  "version": "5.0.0",
+  "description": "Treeverse Chrome Extension - Visualize Twitter/X conversations as interactive trees",
   "author": "Paul Butler",
   "license": "MIT",
+  "type": "module",
+  "scripts": {
+    "dev": "vite",
+    "build": "vite build",
+    "build:dev": "vite build --mode development",
+    "preview": "vite preview",
+    "lint": "tsc --noEmit && eslint src --ext .ts",
+    "type-check": "tsc --noEmit"
+  },
+  "devDependencies": {
+    "@crxjs/vite-plugin": "^2.0.0-beta.28",
+    "@types/chrome": "^0.0.268",
+    "@types/d3-dispatch": "^3.0.6",
+    "@types/d3-hierarchy": "^3.1.7",
+    "@types/d3-interpolate": "^3.0.4",
+    "@types/d3-scale": "^4.0.8",
+    "@types/d3-selection": "^3.0.10",
+    "@types/d3-transition": "^3.0.9",
+    "@types/d3-zoom": "^3.0.8",
+    "typescript": "^5.3.3",
+    "vite": "^5.0.0"
+  },
   "dependencies": {
-    "d3": "^5.15.1"
+    "d3-dispatch": "^3.0.1",
+    "d3-hierarchy": "^3.1.2",
+    "d3-interpolate": "^3.0.1",
+    "d3-scale": "^4.0.2",
+    "d3-selection": "^3.0.0",
+    "d3-transition": "^3.0.1",
+    "d3-zoom": "^3.0.0"
   }
 }

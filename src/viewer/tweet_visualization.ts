@@ -1,7 +1,7 @@
 import { select, Selection } from 'd3-selection'
 import { tree, HierarchyNode, HierarchyPointNode } from 'd3-hierarchy'
 import { zoom, zoomIdentity, ZoomBehavior } from 'd3-zoom'
-import { scaleSqrt, ScalePower } from 'd3-scale'
+
 import { dispatch, Dispatch } from 'd3-dispatch'
 // Import d3-transition to enable transition method on selections
 import 'd3-transition'
@@ -20,42 +20,19 @@ export class TweetVisualization {
   private edges!: Selection<SVGGElement, unknown, null, undefined>
   private zoomBehavior!: ZoomBehavior<Element, unknown>
   private listeners!: Dispatch<EventTarget>
-  private colorScale!: ScalePower<string, number, never>
   private selected: HierarchyPointNode<TweetNode> | null = null
   private xscale: number = 0
   private yscale: number = 0
   private layout: HierarchyPointNode<TweetNode> | null = null
+  private edgeColor: string = '#94a3b8' // Slate-400 for uniform edge color
 
   constructor(svgElement: HTMLElement) {
     this.buildTree(svgElement)
     this.listeners = dispatch('hover', 'click', 'dblclick')
-
-    let timeIntervals = [
-      300,
-      600,
-      3600,
-      10800
-    ]
-    let timeColors = [
-      '#FA5050',
-      '#E9FA50',
-      '#F5F1D3',
-      '#47D8F5'
-    ]
-
-    this.colorScale = scaleSqrt<string, number>()
-      .domain(timeIntervals)
-      .range(timeColors)
   }
 
   on(eventType: string, callback: (event: Event, d: unknown) => void) {
     this.listeners.on(eventType, callback)
-  }
-
-  private colorEdge(edgeTarget: HierarchyNode<TweetNode>): string {
-    let data = edgeTarget.data
-    let timeDelta = (data.tweet.time - (edgeTarget.parent!.data as TweetNode).tweet.time) / 1000
-    return this.colorScale(timeDelta).toString()
   }
 
   private static treeWidth<T>(hierarchyNode: HierarchyNode<T>): number {
@@ -195,7 +172,7 @@ export class TweetVisualization {
       .attr('d', edgeToPath as any)
       .attr('fill', 'none')
       .attr('stroke-width', 2)
-      .attr('stroke', (d: unknown) => this.colorEdge(d as HierarchyNode<TweetNode>))
+      .attr('stroke', this.edgeColor)
       .attr('opacity', 0)
       .transition().delay(duration)
       .attr('opacity', 1)

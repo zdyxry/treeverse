@@ -33,11 +33,13 @@ export class FeedController {
   }
 
   async enterComments(comments: Selection<Element, unknown, null, undefined>): Promise<void> {
+    console.log('[Treeverse] enterComments called, enter size:', comments.enter().size())
     return new Promise<void>((resolve) => {
       if (comments.enter().size() == 0) {
         resolve()
         return
       }
+      console.log('[Treeverse] creating comment elements...')
       comments
         .enter()
         .append('div')
@@ -98,12 +100,18 @@ export class FeedController {
   }
 
   async setFeed(node: PointNode) {
+    console.log('[Treeverse] setFeed called, ancestors count:', node.ancestors().length)
     let ancestors = node.ancestors()
     ancestors.reverse()
-
-    let comments = select(this.container.getElementsByClassName('comments')[0])
+    
+    const commentsContainer = this.container.getElementsByClassName('comments')[0]
+    console.log('[Treeverse] comments container:', commentsContainer)
+    
+    let comments = select(commentsContainer)
       .selectAll('div.comment')
       .data(ancestors, (d: unknown) => (d as HierarchyPointNode<TweetNode>).data.getId())
+    
+    console.log('[Treeverse] comments selection size:', comments.size(), 'enter size:', comments.enter().size(), 'exit size:', comments.exit().size())
 
     await this.exitComments(comments as unknown as Selection<Element, unknown, null, undefined>)
     await this.enterComments(comments as unknown as Selection<Element, unknown, null, undefined>)

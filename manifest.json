@@ -35,7 +35,9 @@
   ],
   "permissions": [
     "activeTab",
-    "scripting"
+    "scripting",
+    "storage",
+    "notifications"
   ],
   "host_permissions": [
     "https://twitter.com/*",

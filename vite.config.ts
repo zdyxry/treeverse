@@ -5,9 +5,6 @@ import manifest from './manifest.json' assert { type: 'json' }
 export default defineConfig({
   build: {
     rollupOptions: {
-      input: {
-        // Main extension entries are handled by CRX plugin
-      },
       output: {
         manualChunks: undefined,
       },

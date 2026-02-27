@@ -1,7 +1,12 @@
 import { matchTweetURL, clickAction, onMessageFromContentScript } from './common'
 
+console.log('[Treeverse] service-worker.ts loaded')
+
 // MV3: Use chrome.action instead of chrome.pageAction
-chrome.action.onClicked.addListener(clickAction)
+chrome.action.onClicked.addListener((tab) => {
+  console.log('[Treeverse] Extension icon clicked, tab:', tab.url)
+  clickAction(tab)
+})
 
 // MV3: Use chrome.tabs.onUpdated to show/hide action button based on URL
 chrome.tabs.onUpdated.addListener((tabId, changeInfo, _tab) => {

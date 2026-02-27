@@ -152,6 +152,7 @@ export class TweetVisualization {
   }
 
   setTreeData(tree: TweetTree) {
+    console.log('[Treeverse] setTreeData called')
     let hierarchyNode = tree.toHierarchy()
     let layout = treeFn<TweetNode>().separation((a, b) => a.children || b.children ? 3 : 2)(hierarchyNode)
     this.layout = layout
@@ -224,28 +225,47 @@ export class TweetVisualization {
       .classed('selected', (d: unknown) => d === this.selected)
       .attr('opacity', 1)
 
-    nodes.enter()
+    console.log('[Treeverse] creating nodes, count:', descendents.length)
+    
+    const enterNodes = nodes.enter()
       .append('g')
       .style('cursor', 'pointer')
+      
+    console.log('[Treeverse] enter nodes count:', enterNodes.size())
+    
+    const self = this
+    
+    enterNodes
       // D3 v7: event is passed as first parameter
-      .on('mouseover', (_event: MouseEvent, e: unknown) => {
-        const datum = e as PointNode
-        if (!this.selected) {
-          this.listeners.call('hover', undefined, datum)
+      .on('mouseover', function(this: any, event: MouseEvent, d: unknown) {
+        console.log('[Treeverse] mouseover raw d:', d)
+        console.log('[Treeverse] mouseover this.datum:', select(this).datum())
+        const datum = (d || select(this).datum()) as PointNode
+        console.log('[Treeverse] mouseover event, datum:', datum, 'selected:', self.selected)
+        if (!datum) {
+          console.error('[Treeverse] mouseover datum is undefined!')
+          return
+        }
+        if (!self.selected) {
+          console.log('[Treeverse] calling hover listener with datum:', datum)
+          self.listeners.call('hover', undefined, datum)
         }
       })
-      .on('click', (event: MouseEvent, e: unknown) => {
-        const datum = e as PointNode
-        this.listeners.call('hover', undefined, datum)
-        this.selected = datum as unknown as HierarchyPointNode<TweetNode>
-        this.redraw()
+      .on('click', function(event: MouseEvent, d: unknown) {
+        const datum = d as PointNode
+        if (!datum) return
+        self.listeners.call('hover', undefined, datum)
+        self.selected = datum as unknown as HierarchyPointNode<TweetNode>
+        self.redraw()
         event.stopPropagation()
       })
-      .on('dblclick', (event: MouseEvent, e: unknown) => {
-        const datum = e as PointNode
-        this.listeners.call('dblclick', undefined, datum.data)
+      .on('dblclick', function(event: MouseEvent, d: unknown) {
+        const datum = d as PointNode
+        if (!datum) return
+        console.log('[Treeverse] calling dblclick listener')
+        self.listeners.call('dblclick', undefined, datum.data)
         event.stopPropagation()
-        this.selected = null
+        self.selected = null
       })
       .classed('has_more', (d: unknown) => (d as HierarchyPointNode<TweetNode>).data.hasMore())
       .attr('transform', (d: unknown) => `translate(${(this.xscale * (d as HierarchyPointNode<TweetNode>).x) - 20} ${(this.yscale * (d as HierarchyPointNode<TweetNode>).y) - 20})`)

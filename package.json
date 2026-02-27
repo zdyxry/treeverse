@@ -6,9 +6,12 @@
   "license": "MIT",
   "type": "module",
   "scripts": {
-    "dev": "vite",
-    "build": "vite build",
-    "build:dev": "vite build --mode development",
+    "dev": "npm run clean && npm run build:content && concurrently \"vite build --watch --mode development\" \"npm run watch:content\"",
+    "build": "vite build && npm run build:content",
+    "build:dev": "vite build --mode development && npm run build:content",
+    "build:content": "tsc src/content/main.ts --outDir dist/resources/script --target ES2020 --module ESNext --moduleResolution node && mv dist/resources/script/main.js dist/resources/script/content.js || true",
+    "watch:content": "chokidar 'src/content/**/*.ts' -c 'npm run build:content'",
+    "clean": "rm -rf dist",
     "preview": "vite preview",
     "lint": "tsc --noEmit && eslint src --ext .ts",
     "type-check": "tsc --noEmit"
@@ -23,6 +26,8 @@
     "@types/d3-selection": "^3.0.10",
     "@types/d3-transition": "^3.0.9",
     "@types/d3-zoom": "^3.0.8",
+    "chokidar-cli": "^3.0.0",
+    "concurrently": "^9.2.1",
     "typescript": "^5.3.3",
     "vite": "^5.0.0"
   },

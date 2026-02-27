@@ -24,7 +24,9 @@ export class VisualizationController {
   private expandButton: HTMLButtonElement | null = null
 
   fetchTweets(tweetId: string) {
+    console.log('[Treeverse] fetchTweets called')
     this.server!.requestTweets(tweetId, null).then((tweetSet) => {
+      console.log('[Treeverse] tweetSet received, tweets count:', tweetSet.tweets.length)
       let tweetTree = TweetTree.fromTweetSet(tweetSet)
       document.getElementsByTagName('title')[0].innerText =
         `${tweetTree.root.tweet.username} - "${tweetTree.root.tweet.bodyText}" in Treeverse`
@@ -99,8 +101,18 @@ export class VisualizationController {
       this.expandButton = this.toolbar.addButton('Expand All', this.expandAll.bind(this))
     }
 
-    this.vis.on('hover', (_event: Event, d: unknown) => {
-      this.feed.setFeed(d as PointNode)
+    this.vis.on('hover', (event: Event, d: unknown) => {
+      console.log('[Treeverse] hover event triggered, event:', event, 'd:', d)
+      // d3-dispatch v7: when using .call(type, that, ...args), the first argument to callback
+      // is the event object (which contains the data we passed), not the first arg from .call()
+      // The actual data passed to .call() is in event, not in d
+      const node = (event as any) as PointNode
+      if (!node || !node.data) {
+        console.error('[Treeverse] hover node or node.data is undefined!')
+        return
+      }
+      console.log('[Treeverse] hover node:', node.data.tweet.username, node.data.tweet.bodyText.substring(0, 50))
+      this.feed.setFeed(node)
     })
     if (!offline) {
       this.vis.on('dblclick', (_event: Event, d: unknown) => {

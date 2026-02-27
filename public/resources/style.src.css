@@ -96,21 +96,6 @@
     unicode-bidi: embed;
   }
 
-  /* Legend at bottom of tree */
-  .legend {
-    @apply absolute bottom-4 left-4;
-    @apply text-xs;
-    @apply text-base-content/80;
-    @apply bg-white/90 backdrop-blur-sm;
-    @apply px-4 py-2 rounded-lg;
-    @apply border border-base-300;
-    @apply shadow-sm;
-  }
-
-  .legend-item {
-    @apply inline-flex items-center gap-1 mx-2;
-  }
-
   /* Comment/Tweet item styling */
   .tweet-item {
     @apply mb-4;

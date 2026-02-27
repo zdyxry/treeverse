@@ -77,6 +77,50 @@ export class TweetTree {
   toHierarchy() {
     return hierarchy(this.root, (d: TweetNode) => Array.from(d.children.values()))
   }
+
+  /**
+   * Generate Mermaid flowchart markdown representation of the tree
+   */
+  toMermaidMarkdown(): string {
+    const lines: string[] = []
+    lines.push('```mermaid')
+    lines.push('graph TD')
+    
+    // Helper to sanitize text for Mermaid
+    const sanitize = (text: string): string => {
+      return text
+        .replace(/\[/g, '【')
+        .replace(/\]/g, '】')
+        .replace(/"/g, '"')
+        .replace(/\n/g, '<br/>')
+        .substring(0, 100) // Limit length
+    }
+    
+    // Helper to create node ID
+    const nodeId = (id: string): string => `N${id.substring(0, 12)}`
+    
+    // Traverse tree and generate nodes and edges
+    const traverse = (node: TweetNode, depth: number = 0) => {
+      const id = nodeId(node.getId())
+      const text = sanitize(node.tweet.bodyText)
+      const user = sanitize(node.tweet.username)
+      
+      // Define node with content
+      lines.push(`    ${id}["${text}<br/><small>@${user}</small>"]`)
+      
+      // Create edges to children
+      for (const child of node.children.values()) {
+        const childId = nodeId(child.getId())
+        lines.push(`    ${id} --> ${childId}`)
+        traverse(child, depth + 1)
+      }
+    }
+    
+    traverse(this.root)
+    lines.push('```')
+    
+    return lines.join('\n')
+  }
 }
 
 /**

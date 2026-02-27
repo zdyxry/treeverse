@@ -84,6 +84,28 @@ export class VisualizationController {
     }
   }
 
+  async copyAsMermaid() {
+    if (!this.tweetTree) {
+      console.error('[Treeverse] No tweet tree to copy')
+      return
+    }
+    
+    const markdown = this.tweetTree.toMermaidMarkdown()
+    
+    try {
+      await navigator.clipboard.writeText(markdown)
+      console.log('[Treeverse] Copied to clipboard')
+      // Show a simple notification
+      const notification = document.createElement('div')
+      notification.textContent = 'Copied as Mermaid!'
+      notification.className = 'fixed top-4 right-4 bg-success text-success-content px-4 py-2 rounded shadow-lg z-50'
+      document.body.appendChild(notification)
+      setTimeout(() => notification.remove(), 2000)
+    } catch (err) {
+      console.error('[Treeverse] Failed to copy:', err)
+    }
+  }
+
   expandAll() {
     if (this.expandingTimer === null) {
       if (this.expandButton) {
@@ -105,6 +127,7 @@ export class VisualizationController {
     this.toolbar = new Toolbar(document.getElementById('toolbar')!)
     if (!offline) {
       this.expandButton = this.toolbar.addButton('Expand All', this.expandAll.bind(this))
+      this.toolbar.addButton('Copy as Mermaid', this.copyAsMermaid.bind(this))
     }
 
     this.vis.on('hover', (event: Event, d: unknown) => {

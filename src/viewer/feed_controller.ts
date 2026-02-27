@@ -43,57 +43,67 @@ export class FeedController {
       comments
         .enter()
         .append('div')
-        .classed('comment', true)
+        .classed('card card-compact bg-base-100 shadow-sm tweet-item', true)
         .each(function (this: Element, datum: unknown) {
           const d = datum as PointNode
           let tweet = d.data.tweet
-          let div = select(this)
+          let card = select(this)
 
-          div
-            .append('a')
-            .classed('avatar', true)
-            .append('img')
+          let cardBody = card.append('div').classed('card-body p-3', true)
+
+          // Header with avatar and author info
+          let header = cardBody.append('div').classed('flex items-start gap-3', true)
+
+          let avatarLink = header.append('a')
+            .attr('href', tweet.getUserUrl())
+            .attr('target', '_blank')
+            .classed('flex-shrink-0', true)
+          
+          avatarLink.append('img')
             .attr('src', tweet.avatar)
-            .style('height', 'auto')
-            .style('max-width', '35px')
-            .style('width', 'auto')
-            .style('max-height', '35px')
+            .classed('w-10 h-10 rounded-lg object-cover', true)
 
-          let content = div
-            .append('div')
-            .classed('content', true)
+          let content = header.append('div').classed('flex-grow min-w-0', true)
 
-          content
-            .append('span')
-            .classed('author', true)
-            .html(`${tweet.name} (<a href="${tweet.getUserUrl()}">@${tweet.username}</a>)`)
+          let authorRow = content.append('div').classed('flex items-center gap-2 flex-wrap', true)
+          
+          authorRow.append('span')
+            .classed('font-semibold text-base-content text-sm', true)
+            .text(tweet.name)
+          
+          authorRow.append('a')
+            .attr('href', tweet.getUserUrl())
+            .attr('target', '_blank')
+            .classed('text-xs text-base-content/50 hover:text-primary transition-colors', true)
+            .text(`@${tweet.username}`)
 
-          let body = content
-            .append('div')
-            .classed('text', true)
+          let body = content.append('div')
+            .classed('text-sm text-base-content/80 mt-1 leading-relaxed', true)
             .classed('rtl', tweet.rtl)
             .html(tweet.bodyHtml)
 
+          // Link to tweet
           body.append('a')
-            .html(' &rarr;')
             .attr('href', tweet.getUrl())
+            .attr('target', '_blank')
+            .classed('text-primary hover:text-primary-focus ml-1', true)
+            .html('→')
 
-          if (tweet.images) {
-            let imgWidth = 100 / tweet.images.length
-            content.append('div')
-              .classed('extra images', true)
-              .selectAll('img')
+          // Images
+          if (tweet.images && tweet.images.length > 0) {
+            let imagesContainer = cardBody.append('div')
+              .classed('grid grid-cols-2 gap-2 mt-2', true)
+            
+            imagesContainer.selectAll('img')
               .data(tweet.images)
               .enter()
               .append('img')
-              .attr('width', () => `${imgWidth}%`)
               .attr('src', (d: string) => d)
+              .classed('w-full h-32 object-cover rounded-lg', true)
           }
         })
         .style('opacity', 0)
-        .style('display', 'none')
-        .transition().duration(100)
-        .style('display', 'block')
+        .transition().duration(150)
         .style('opacity', 1)
         .on('start', () => resolve())
     })
@@ -104,11 +114,11 @@ export class FeedController {
     let ancestors = node.ancestors()
     ancestors.reverse()
     
-    const commentsContainer = this.container.getElementsByClassName('comments')[0]
-    console.log('[Treeverse] comments container:', commentsContainer)
+    const feedContainer = this.container.querySelector('#feed')
+    console.log('[Treeverse] feed container:', feedContainer)
     
-    let comments = select(commentsContainer)
-      .selectAll('div.comment')
+    let comments = select(feedContainer)
+      .selectAll('div.tweet-item')
       .data(ancestors, (d: unknown) => (d as HierarchyPointNode<TweetNode>).data.getId())
     
     console.log('[Treeverse] comments selection size:', comments.size(), 'enter size:', comments.enter().size(), 'exit size:', comments.exit().size())

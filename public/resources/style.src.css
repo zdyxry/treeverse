@@ -1,0 +1,147 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/* Custom styles for Treeverse */
+@layer base {
+  body {
+    @apply m-0 text-sm;
+    font-family: system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+  }
+}
+
+@layer components {
+  /* Tree container */
+  #tree {
+    @apply w-full h-full;
+    background-color: #1a1a2e;
+  }
+  
+  #treeContainer {
+    @apply flex-grow relative;
+  }
+
+  /* Selected node styling */
+  .selected rect {
+    stroke: #f43f5e;
+    stroke-width: 4px;
+  }
+
+  /* Sidebar styling */
+  #sidebar {
+    @apply flex flex-col;
+    @apply w-[500px] min-w-[500px];
+    @apply bg-base-200;
+  }
+
+  /* Info box - modern card style */
+  #infoBox {
+    @apply p-4;
+    @apply bg-base-100;
+    @apply shadow-lg;
+    @apply border-b border-base-300;
+  }
+
+  /* Feed container */
+  #feedContainer {
+    @apply flex-grow overflow-y-auto;
+  }
+
+  #feedInner {
+    @apply p-4;
+  }
+
+  /* Tweet content styles */
+  .text {
+    @apply whitespace-pre-wrap;
+  }
+
+  .text a.twitter-atreply s {
+    text-decoration: none;
+  }
+
+  .text .Emoji,
+  .text .twitter-hashflag-container img {
+    @apply h-5 align-middle;
+  }
+
+  .text .u-hidden {
+    @apply hidden;
+  }
+
+  .text b {
+    @apply font-normal;
+  }
+
+  .u-hiddenVisually {
+    @apply hidden;
+  }
+
+  /* Dropzone */
+  .dropzone {
+    @apply p-4 border-2 border-dashed border-primary/30 rounded-lg;
+    @apply bg-base-200 text-center;
+    @apply text-base-content/60;
+  }
+
+  /* RTL support */
+  .rtl {
+    @apply text-right;
+    direction: rtl;
+    unicode-bidi: embed;
+  }
+
+  /* Legend at bottom of tree */
+  .legend {
+    @apply absolute bottom-4 left-4;
+    @apply text-xs;
+    @apply text-base-content/80;
+    @apply bg-base-300/80 backdrop-blur-sm;
+    @apply px-4 py-2 rounded-lg;
+    @apply border border-base-content/10;
+  }
+
+  .legend-item {
+    @apply inline-flex items-center gap-1 mx-2;
+  }
+
+  /* Comment/Tweet item styling */
+  .tweet-item {
+    @apply mb-4;
+  }
+
+  .tweet-avatar {
+    @apply w-10 h-10 rounded-lg;
+    @apply object-cover;
+  }
+
+  .tweet-author {
+    @apply font-semibold text-base-content;
+  }
+
+  .tweet-metadata {
+    @apply text-xs text-base-content/50 ml-2;
+  }
+
+  .tweet-text {
+    @apply mt-1 text-sm text-base-content/80 leading-relaxed;
+  }
+}
+
+/* Scrollbar styling */
+::-webkit-scrollbar {
+  width: 8px;
+  height: 8px;
+}
+
+::-webkit-scrollbar-track {
+  @apply bg-base-200;
+}
+
+::-webkit-scrollbar-thumb {
+  @apply bg-base-content/20 rounded-full;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  @apply bg-base-content/30;
+}

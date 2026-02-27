@@ -8,12 +8,11 @@ export class Toolbar {
   }
 
   addButton(label: string, onClicked: () => void): HTMLButtonElement {
-    return select(this.container)
-      .append('button')
-      .text(label)
-      .classed('ui primary button', true)
-      .style('margin-bottom', '10px')
-      .on('click', onClicked)
-      .node() as HTMLButtonElement
+    const button = document.createElement('button')
+    button.className = 'btn btn-primary btn-sm'
+    button.textContent = label
+    button.addEventListener('click', onClicked)
+    this.container.appendChild(button)
+    return button
   }
 }

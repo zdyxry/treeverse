@@ -22,19 +22,8 @@ export function createPage(container: HTMLElement) {
             </div>
         </div>
         <div id="sidebar" class="bg-base-200">
-            <div id="infoBox">
-                <div class="prose prose-sm max-w-none">
-                    <p class="text-base-content/80 mb-2">
-                        Visualized by <a href="https://treeverse.app" class="link link-primary" target="_blank">Treeverse</a>. 
-                        <a href="https://treeverse.app" class="link link-secondary" target="_blank">Read guide</a>
-                    </p>
-                    <p class="text-base-content/60 text-xs mb-3">
-                        Double-click tweets with ellipsis to expand.
-                        <a href="https://twitter.com/paulgb" class="link" target="_blank">@paulgb</a> · 
-                        <a href="https://github.com/paulgb/Treeverse/issues" class="link" target="_blank">GitHub</a>
-                    </p>
-                </div>
-                <div id="toolbar" class="flex flex-wrap gap-2 mt-3"></div>
+            <div id="infoBox" class="hidden">
+                <div id="toolbar"></div>
             </div>
             <div id="feedContainer">
                 <div id="feedInner">

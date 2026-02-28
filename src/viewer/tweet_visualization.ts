@@ -94,37 +94,37 @@ export class TweetVisualization {
         return
       }
       switch (event.code) {
-        case 'ArrowDown':
-          if (this.selected.children && this.selected.children.length > 0) {
-            this.selected = this.selected.children[0] as HierarchyPointNode<TweetNode>
+      case 'ArrowDown':
+        if (this.selected.children && this.selected.children.length > 0) {
+          this.selected = this.selected.children[0] as HierarchyPointNode<TweetNode>
+        }
+        break
+      case 'ArrowUp':
+        if (this.selected.parent) {
+          this.selected = this.selected.parent as HierarchyPointNode<TweetNode>
+        }
+        break
+      case 'ArrowLeft':
+        if (this.selected.parent) {
+          let i = this.selected.parent.children!.indexOf(this.selected)
+          if (i > 0) {
+            this.selected = this.selected.parent.children![i - 1] as HierarchyPointNode<TweetNode>
           }
-          break
-        case 'ArrowUp':
-          if (this.selected.parent) {
-            this.selected = this.selected.parent as HierarchyPointNode<TweetNode>
+        }
+        break
+      case 'ArrowRight':
+        if (this.selected.parent) {
+          let i = this.selected.parent.children!.indexOf(this.selected)
+          if (i >= 0 && i < this.selected.parent.children!.length - 1) {
+            this.selected = this.selected.parent.children![i + 1] as HierarchyPointNode<TweetNode>
           }
-          break
-        case 'ArrowLeft':
-          if (this.selected.parent) {
-            let i = this.selected.parent.children!.indexOf(this.selected)
-            if (i > 0) {
-              this.selected = this.selected.parent.children![i - 1] as HierarchyPointNode<TweetNode>
-            }
-          }
-          break
-        case 'ArrowRight':
-          if (this.selected.parent) {
-            let i = this.selected.parent.children!.indexOf(this.selected)
-            if (i >= 0 && i < this.selected.parent.children!.length - 1) {
-              this.selected = this.selected.parent.children![i + 1] as HierarchyPointNode<TweetNode>
-            }
-          }
-          break
-        case 'Space':
-          this.listeners.call('dblclick', undefined, this.selected.data)
-          break
-        default:
-          return
+        }
+        break
+      case 'Space':
+        this.listeners.call('dblclick', undefined, this.selected.data)
+        break
+      default:
+        return
       }
       this.redraw()
       this.listeners.call('hover', undefined, this.selected)

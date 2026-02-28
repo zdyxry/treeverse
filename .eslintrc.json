@@ -4,7 +4,9 @@
         "es6": true
     },
     "globals": {
-        "chrome": false
+        "chrome": false,
+        "RequestInfo": false,
+        "RequestInit": false
     },
     "extends": "eslint:recommended",
     "parser": "@typescript-eslint/parser",
@@ -19,7 +21,7 @@
         ],
         "indent": [
             "error",
-            4
+            2
         ],
         "linebreak-style": [
             "error",
@@ -32,6 +34,8 @@
         "semi": [
             "error",
             "never"
-        ]
+        ],
+        "no-case-declarations": "off",
+        "no-empty": "off"
     }
 }

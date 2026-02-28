@@ -74,33 +74,33 @@ export class ContentProxy {
 
   async inject() {
     let scr = document.createElement('script')
-    scr.setAttribute('src', chrome.runtime.getURL("resources/script/content.js"))
+    scr.setAttribute('src', chrome.runtime.getURL('resources/script/content.js'))
   
-    window.addEventListener("message", (message) => {
+    window.addEventListener('message', (message) => {
       switch (message.data.action) {
-        case Action.state:
-          const actionData = message.data as StateResponse
-          this.state = actionData.state
+      case Action.state:
+        const actionData = message.data as StateResponse
+        this.state = actionData.state
 
-          if (this.state === 'ready') {
-            chrome.runtime.sendMessage({message: 'ready'});
-            // Request GraphQL info once ready
-            this.requestGraphQLInfo()
-          }
+        if (this.state === 'ready') {
+          chrome.runtime.sendMessage({message: 'ready'})
+          // Request GraphQL info once ready
+          this.requestGraphQLInfo()
+        }
 
-          break
-        case Action.result:
-          const resultData = message.data as FetchResponse
-          const callback = this.callbacks.get(resultData.key)
-          if (callback) {
-            callback(resultData)
-          }
-          break
-        case Action.graphql_info:
-          if (message.data.graphqlInfo) {
-            this.graphqlInfo = message.data.graphqlInfo as GraphQLInfo
-          }
-          break
+        break
+      case Action.result:
+        const resultData = message.data as FetchResponse
+        const callback = this.callbacks.get(resultData.key)
+        if (callback) {
+          callback(resultData)
+        }
+        break
+      case Action.graphql_info:
+        if (message.data.graphqlInfo) {
+          this.graphqlInfo = message.data.graphqlInfo as GraphQLInfo
+        }
+        break
       }
     }, false)
     document.body.appendChild(scr)

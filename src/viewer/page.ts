@@ -1,5 +1,5 @@
 export function createPage(container: HTMLElement) {
-    let pageHTML = `
+  let pageHTML = `
         <div id="treeContainer">
             <svg id="tree"></svg>
         </div>
@@ -14,5 +14,5 @@ export function createPage(container: HTMLElement) {
         </div>
     `
 
-    container.innerHTML = pageHTML
+  container.innerHTML = pageHTML
 }

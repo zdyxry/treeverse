@@ -84,7 +84,7 @@ function init() {
   }
 
   // Handle messages from Treeverse viewer
-  window.addEventListener("message", (message) => {
+  window.addEventListener('message', (message) => {
     if (message.data.action === 'fetch') {
       const headers = getAuthHeaders()
       originalFetch(message.data.url, {

@@ -9,14 +9,14 @@ const STORAGE_KEY = 'tweetToLoad'
 
 export function onMessageFromContentScript(request: any, sender: chrome.runtime.MessageSender, _sendResponse: any) {
   switch (request.message) {
-    case 'ready':
-      chrome.storage.session.get(STORAGE_KEY).then((result) => {
-        if (result[STORAGE_KEY]) {
-          launchTreeverse(sender.tab!.id!, result[STORAGE_KEY])
-          chrome.storage.session.remove(STORAGE_KEY)
-        }
-      })
-      break
+  case 'ready':
+    chrome.storage.session.get(STORAGE_KEY).then((result) => {
+      if (result[STORAGE_KEY]) {
+        launchTreeverse(sender.tab!.id!, result[STORAGE_KEY])
+        chrome.storage.session.remove(STORAGE_KEY)
+      }
+    })
+    break
   }
 }
 
@@ -58,36 +58,36 @@ export async function injectScripts(tabId: number, tweetId: string) {
   console.log('[Treeverse] content script state:', state)
 
   switch (state) {
-    case 'ready':
-      console.log('[Treeverse] launching Treeverse...')
-      launchTreeverse(tabId, tweetId)
-      break
-    case 'listening':
-    case 'waiting':
-    case 'missing':
-    default:
-      console.log('[Treeverse] content script not ready, reloading tab...')
-      // Store tweetId in session storage for MV3 service worker persistence
-      await chrome.storage.session.set({ [STORAGE_KEY]: tweetId })
+  case 'ready':
+    console.log('[Treeverse] launching Treeverse...')
+    launchTreeverse(tabId, tweetId)
+    break
+  case 'listening':
+  case 'waiting':
+  case 'missing':
+  default:
+    console.log('[Treeverse] content script not ready, reloading tab...')
+    // Store tweetId in session storage for MV3 service worker persistence
+    await chrome.storage.session.set({ [STORAGE_KEY]: tweetId })
 
-      // Force the tab to reload.
-      chrome.tabs.reload(tabId)
-      console.log('[Treeverse] tab reload called')
+    // Force the tab to reload.
+    chrome.tabs.reload(tabId)
+    console.log('[Treeverse] tab reload called')
 
-      // Ensure the tab loads.
-      setTimeout(() => {
-        chrome.storage.session.get(STORAGE_KEY).then((result) => {
-          if (result[STORAGE_KEY] !== null) {
-            // Show notification instead of alert (alert not available in service worker)
-            chrome.notifications.create({
-              type: 'basic',
-              iconUrl: 'icons/128.png',
-              title: 'Treeverse Error',
-              message: `Treeverse was unable to access the tweet data needed to launch. If you report this error, please mention that the last proxy state was ${state}`
-            })
-          }
-        })
-      }, 2000)
+    // Ensure the tab loads.
+    setTimeout(() => {
+      chrome.storage.session.get(STORAGE_KEY).then((result) => {
+        if (result[STORAGE_KEY] !== null) {
+          // Show notification instead of alert (alert not available in service worker)
+          chrome.notifications.create({
+            type: 'basic',
+            iconUrl: 'icons/128.png',
+            title: 'Treeverse Error',
+            message: `Treeverse was unable to access the tweet data needed to launch. If you report this error, please mention that the last proxy state was ${state}`
+          })
+        }
+      })
+    }, 2000)
   }
 }
 

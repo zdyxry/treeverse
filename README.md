@@ -7,7 +7,6 @@
 
 [![CI](https://github.com/zdyxry/x-treeverse/actions/workflows/ci.yml/badge.svg)](https://github.com/zdyxry/x-treeverse/actions/workflows/ci.yml)
 [![Release](https://github.com/zdyxry/x-treeverse/actions/workflows/release.yml/badge.svg)](https://github.com/zdyxry/x-treeverse/releases)
-[![Chrome Web Store](https://img.shields.io/chrome-web-store/v/YOUR_EXTENSION_ID.svg)](https://chrome.google.com/webstore/detail/YOUR_EXTENSION_ID)
 
 **X-Treeverse** is a browser extension for visualizing and navigating **X (Twitter)** conversation threads as interactive trees.
 
@@ -16,15 +15,7 @@
 Installation
 ------------
 
-### Chrome Web Store (Recommended):
-
-<a href="https://chrome.google.com/webstore/detail/YOUR_EXTENSION_ID">
-    <img src="images/download_chrome.png" alt="Download X-Treeverse for Chrome" style="width: 206px; height: 58px">
-</a>
-
-> **Note**: Replace `YOUR_EXTENSION_ID` with your actual Chrome Web Store extension ID after publishing.
-
-### Manual Installation (Developer Mode):
+### Installation (Developer Mode):
 
 1. Download the latest release from [GitHub Releases](../../releases)
 2. Extract the ZIP file
@@ -206,35 +197,6 @@ await chrome.scripting.executeScript({
   func: () => (window as any).Treeverse?.PROXY?.state
 })
 ```
-
-### Chrome Web Store Publishing Checklist
-
-Before submitting to Chrome Web Store:
-
-- [ ] Update `manifest.json` version number
-- [ ] Update `package.json` version number (should match manifest)
-- [ ] Create a git tag: `git tag -a v1.0.0 -m "Release v1.0.0"` (replace with your version)
-- [ ] Push the tag: `git push origin v1.0.0`
-- [ ] Wait for GitHub Actions to complete and create the release
-- [ ] Download the built ZIP from the [Releases](../../releases) page
-- [ ] Test the ZIP on fresh Chrome profile
-- [ ] Submit to Chrome Web Store
-
-**Automatic Release**: When you push a tag starting with `v`, GitHub Actions will:
-1. Build the extension
-2. Create a ZIP file named `x-treeverse-vX.X.X.zip`
-3. Create a GitHub Release with the ZIP attached
-4. Generate release notes automatically
-
-#### Store Listing Assets:
-- [ ] 1280x800 screenshot (main)
-- [ ] 1280x800 or 640x400 screenshot (optional)
-- [ ] 440x280 small promo tile (optional)
-- [ ] 920x680 large promo tile (optional)
-- [ ] 128x128 icon (already in `public/icons/`)
-- [ ] Write store description (max 160 characters for short description)
-- [ ] Set privacy policy URL (can link to PRIVACY.md)
-- [ ] Choose category (Social & Communication recommended)
 
 License
 -------

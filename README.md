@@ -39,12 +39,8 @@ After installing X-Treeverse, open [x.com](https://x.com) (formerly Twitter) and
 
 The X-Treeverse icon should appear in your browser toolbar (it turns from grey to blue when on a supported page). Click it to launch the visualization.
 
-<img src="images/chrome_treeverse.gif" alt="Opening X-Treeverse in Chrome" style="width: 320px; height: 180px;" />
-
 Exploring the Conversation
 --------------------------
-
-![Screenshot of X-Treeverse.](images/treeverse640.gif)
 
 Conversations are visualized as a tree structure where:
 - **Each box** represents an individual tweet
@@ -58,13 +54,9 @@ Conversations are visualized as a tree structure where:
 - **Click anywhere** in the tree area to unfreeze and return to hover mode
 - **Double-click** a node with a red dot to load more replies
 
-![Right pane in action.](images/right_pane.png)
-
 ### More Replies Indicator:
 
 Tweets with a **red circle containing white ellipses** have additional replies not yet loaded:
-
-![More tweets indicator.](images/red_circles.png)
 
 Keyboard Navigation
 -------------------

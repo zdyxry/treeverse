@@ -44,8 +44,8 @@ export class VisualizationController {
       .then((tweetSet) => {
         console.log(`[Treeverse] expandNode response received, tweets: ${tweetSet.tweets.length}`)
         let added = this.tweetTree!.addTweets(tweetSet, node.tweet.id)
-        console.log(`[Treeverse] expandNode added ${added} tweets, node ${node.tweet.id} hasMore=${node.hasMore()}`)
-        if (added > 0 || !node.hasMore()) {
+        console.log(`[Treeverse] expandNode added ${added} tweets, node ${node.tweet.id} canLoadMorePages=${node.canLoadMorePages()}`)
+        if (added > 0 || !node.canLoadMorePages()) {
           this.vis.setTreeData(this.tweetTree!)
           if (node === this.tweetTree!.root) {
             this.vis.zoomToFit()
@@ -115,7 +115,8 @@ export class VisualizationController {
           console.error('[Treeverse] dblclick: invalid node', node)
           return
         }
-        // Remove the has_more icon immediately on double-click
+        // Mark node as expanded immediately so redraw won't re-add the icon
+        node.complete = true
         this.vis.removeHasMoreIcon(node.tweet.id)
         this.expandNode(node, true)
       })

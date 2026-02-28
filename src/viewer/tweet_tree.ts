@@ -59,16 +59,21 @@ export class TweetTree {
     const targetNodeId = expandedNodeId || rootTweet
     const targetNode = this.index.get(targetNodeId)
     if (targetNode) {
+      targetNode.complete = true
+
       if (cursor) {
         targetNode.cursor = cursor
+        targetNode.fullyLoaded = false
       } else {
         targetNode.fullyLoaded = true
+        targetNode.cursor = null
       }
       
       // If no new tweets were added and we have cursor, mark as fully loaded
       // to prevent infinite loading when API returns empty results
       if (count === 0 && !targetNode.fullyLoaded) {
         targetNode.fullyLoaded = true
+        targetNode.cursor = null
       }
     }
     return count
@@ -132,6 +137,7 @@ export class TweetNode {
   tweet: Tweet
   cursor: string | null = null
   fullyLoaded: boolean = false
+  complete: boolean = false
 
   constructor(tweet: Tweet) {
     this.children = new Map<string, TweetNode>()
@@ -143,16 +149,19 @@ export class TweetNode {
   }
 
   /**
-   * Return false iff this tweet has more replies that we know about.
+   * Whether the red dot indicator should be shown.
+   * Once a node has been expanded (complete=true), the dot disappears permanently.
    */
-  hasMore(): boolean {
-    // The fully loaded flag takes precedence because sometimes the
-    // reply count from twitter is greater than the number of tweets
-    // we actually get back from the API. This is probably because of
-    // replies from private accounts.
+  showHasMoreIcon(): boolean {
+    return !this.complete && this.tweet.replies > 0
+  }
+
+  /**
+   * Whether there are more pages of replies to fetch from the API.
+   */
+  canLoadMorePages(): boolean {
     if (this.fullyLoaded) return false
     if (this.cursor) return true
-    // If we have loaded all children (children count >= reply count), no more to load
     if (this.children.size >= this.tweet.replies) return false
     return true
   }

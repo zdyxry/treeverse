@@ -40,8 +40,7 @@ export class TweetVisualization {
    */
   removeHasMoreIcon(tweetId: string) {
     console.log(`[Treeverse] Removing has_more icon for node ${tweetId}`)
-    // Find the node group by data ID and remove the icon
-    this.nodes.selectAll('g').each(function(this: any) {
+    this.nodes.selectAll('.tweet-node').each(function(this: any) {
       const group = select(this)
       const datum = group.datum() as PointNode | undefined
       if (datum && datum.data && datum.data.getId() === tweetId) {
@@ -201,7 +200,7 @@ export class TweetVisualization {
 
     console.log('[Treeverse] redraw called, descendents:', descendents.length)
 
-    let nodes = this.nodes.selectAll('g')
+    let nodes = this.nodes.selectAll('.tweet-node')
       .data(descendents, (d: unknown) => (d as HierarchyPointNode<TweetNode>).data.getId())
 
     console.log('[Treeverse] nodes selection size:', nodes.size(), 'enter:', nodes.enter().size(), 'exit:', nodes.exit().size())
@@ -221,7 +220,7 @@ export class TweetVisualization {
     nodes.each(function(this: any, datum: unknown) {
       const d = datum as PointNode
       let group = select(this)
-      const hasMore = d.data.hasMore()
+      const hasMore = d.data.showHasMoreIcon()
       console.log(`[Treeverse] Update node ${d.data.getId().slice(0, 8)} hasMore=${hasMore}`)
       if (!hasMore) {
         group.select('.has_more_icon').remove()
@@ -248,6 +247,7 @@ export class TweetVisualization {
     // Create new nodes
     const enterNodes = nodes.enter()
       .append('g')
+      .classed('tweet-node', true)
       .style('cursor', 'pointer')
       
     console.log('[Treeverse] creating enter nodes:', enterNodes.size())
@@ -276,13 +276,13 @@ export class TweetVisualization {
         event.stopPropagation()
         self.selected = null
       })
-      .classed('has_more', (d: unknown) => (d as HierarchyPointNode<TweetNode>).data.hasMore())
+      .classed('has_more', (d: unknown) => (d as HierarchyPointNode<TweetNode>).data.showHasMoreIcon())
       .attr('transform', (d: unknown) => `translate(${(this.xscale * (d as HierarchyPointNode<TweetNode>).x) - 20} ${(this.yscale * (d as HierarchyPointNode<TweetNode>).y) - 20})`)
       .each(function (this: any, datum: unknown) {
         const d = datum as PointNode
         let group = select(this)
         let tweet = d.data.tweet
-        const hasMore = d.data.hasMore()
+        const hasMore = d.data.showHasMoreIcon()
         console.log(`[Treeverse] Creating new node ${d.data.getId().slice(0, 8)} hasMore=${hasMore}`)
 
         group.append('rect')

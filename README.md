@@ -1,4 +1,4 @@
-![Treeverse Icon](public/icons/32.png) X-Treeverse
+![X-Treeverse Icon](public/icons/128.png) X-Treeverse
 =========
 
 > **Community Fork Notice**: This is a community-maintained fork of [paulgb/Treeverse](https://github.com/paulgb/treeverse), originally created by Paul Butler. While the original author has retired the project and moved to [Bluesky](https://bsky.app/) integration, this fork continues to maintain and support the **X (Twitter)** conversation visualization functionality for the community.
